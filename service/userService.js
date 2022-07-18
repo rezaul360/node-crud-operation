@@ -1,6 +1,11 @@
 const User = require("../models/authModel");
 
-//database query
+//--------- get all users------------
+const findUsers = () => {
+  return User.find();
+};
+
+//------------database query---------------
 const findUserProperty = (key, value) => {
   if (key == "_id") {
     User.findById(value);
@@ -8,11 +13,17 @@ const findUserProperty = (key, value) => {
   return User.findOne({ [key]: value });
 };
 
-// create user
-const createNewUser = ({ name, email, password }) => {
-  const user = new User({ name, email, password });
+//-------- create user-------------------------
+const createNewUser = ({ name, email, password, roles, accountStatus }) => {
+  const user = new User({
+    name,
+    email,
+    password,
+    roles: roles ? roles : ["STUDENT"],
+    accountStatus: accountStatus ? accountStatus : "PENDING",
+  });
 
   return user.save();
 };
 
-module.exports = { findUserProperty, createNewUser };
+module.exports = { findUserProperty, createNewUser, findUsers };

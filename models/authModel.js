@@ -9,11 +9,26 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
+    message: (prop) => `Invalid email ${prop.value}`,
   },
-  password: String,
+  password: {
+    type: String,
+    minlength: [6, "Password is too short"],
+  },
+  roles: {
+    type: [String],
+    required: true,
+    default: ["STUDENT"],
+  },
+  accountStatus: {
+    type: String,
+    enum: ["PENDING", "ACTIVE", "REJECTED"],
+    default: "PENDING",
+    required: true,
+  },
 });
 
 //model
-const UserModels = model("Users", UserSchema);
+const AuthModel = model("Users", UserSchema);
 
-module.exports = UserModels;
+module.exports = AuthModel;

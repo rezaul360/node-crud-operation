@@ -4,7 +4,13 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 //register validation
-const registerService = async ({ name, email, password }) => {
+const registerService = async ({
+  name,
+  email,
+  password,
+  roles,
+  accountStatus,
+}) => {
   //email validation
   let user = await findUserProperty("email", email);
   if (user) {
@@ -15,7 +21,7 @@ const registerService = async ({ name, email, password }) => {
   const salt = await bcrypt.genSalt(10);
   password = await bcrypt.hash(password, salt);
   //return create new user
-  return createNewUser({ name, email, password });
+  return createNewUser({ name, email, password, roles, accountStatus });
 };
 //-----------------------------------------------
 // login validity
