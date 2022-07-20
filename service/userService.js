@@ -1,4 +1,5 @@
 const User = require("../models/authModel");
+const error = require("../utils/error");
 
 //--------- get all users------------
 const findUsers = () => {
@@ -26,4 +27,14 @@ const createNewUser = ({ name, email, password, roles, accountStatus }) => {
   return user.save();
 };
 
-module.exports = { findUserProperty, createNewUser, findUsers };
+//update user
+const updateUser = async (id, data) => {
+  //check exists email not update
+  const user = await findUserProperty("email", data.email);
+  if (user) {
+    throw error("Email already in use", 400);
+  }
+  return User.findByIdAndUpdate(id, { ...data }, { new: true });
+};
+
+module.exports = { findUserProperty, createNewUser, findUsers, updateUser };
